@@ -30,6 +30,10 @@ def handle_join(data):
 def handle_secure_msg(data):
     emit('receive_secure_msg', {'payload': data['payload']}, to=data['room'], include_self=False)
 
+import os
+
 if __name__ == '__main__':
-    # 🛠️ Pass host and port directly so it runs seamlessly on Render's web interface
-    socketio.run(app, host='0.0.0.0', port=10000)
+    # Render automatically sets a 'PORT' environment variable. 
+    # This reads that variable, or defaults to 10000 if running locally.
+    port = int(os.environ.get("PORT", 10000))
+    socketio.run(app, host='0.0.0.0', port=port)
