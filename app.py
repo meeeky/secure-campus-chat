@@ -32,8 +32,9 @@ def handle_secure_msg(data):
 
 import os
 
+import os
+
 if __name__ == '__main__':
-    # Render automatically sets a 'PORT' environment variable. 
-    # This reads that variable, or defaults to 10000 if running locally.
     port = int(os.environ.get("PORT", 10000))
-    socketio.run(app, host='0.0.0.0', port=port)
+    # 🛠️ Add allow_unsafe_werkzeug=True to bypass the production server check
+    socketio.run(app, host='0.0.0.0', port=port, allow_unsafe_werkzeug=True)
