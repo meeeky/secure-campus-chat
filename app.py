@@ -7,7 +7,14 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'anonymous_campus_secret_key'
 
 # 🛠️ Explicitly tell Flask-SocketIO to use Python's built-in threading mode
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
+# Drastically lowers the ping frequency to save background bandwidth
+socketio = SocketIO(
+    app, 
+    cors_allowed_origins="*", 
+    async_mode="threading",
+    ping_timeout=30,      # Give clients 30 seconds to respond
+    ping_interval=120     # Only check connection once every 2 minutes (default is 25)
+)
 
 def generate_room_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
