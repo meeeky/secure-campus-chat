@@ -8,12 +8,14 @@ app.config['SECRET_KEY'] = 'anonymous_campus_secret_key'
 
 # 🛠️ Explicitly tell Flask-SocketIO to use Python's built-in threading mode
 # Drastically lowers the ping frequency to save background bandwidth
+# 🛠️ manage_session=True forces the threads to share room memory!
 socketio = SocketIO(
     app, 
     cors_allowed_origins="*", 
     async_mode="threading",
-    ping_timeout=30,      # Give clients 30 seconds to respond
-    ping_interval=120     # Only check connection once every 2 minutes (default is 25)
+    manage_session=True,  # Crucial for cross-thread room communication
+    ping_timeout=30,      
+    ping_interval=120     
 )
 
 def generate_room_code():
