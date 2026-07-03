@@ -112,6 +112,23 @@
 
     document.getElementById('send-btn').addEventListener('click', dispatchSecurePayload);
     msgInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') dispatchSecurePayload(); });
+    let idleTimer;
+    function resetIdleTimer() {
+        clearTimeout(idleTimer);
+        // 10 minutes in milliseconds
+        idleTimer = setTimeout(() => {
+            socket.disconnect(); // Hard drop the socket connection to save server bandwidth
+            logToStream(null, "💤 Disconnected due to 10 minutes of inactivity. Refresh to rejoin.", "sys");
+            document.getElementById('msg-input').disabled = true;
+            document.getElementById('send-btn').disabled = true;
+        }, 600000); 
+    }
+
+    // Watch for user interactions to keep them active
+    window.onload = resetIdleTimer;
+    document.onmousemove = resetIdleTimer;
+    document.onkeydown = resetIdleTimer;
+    
 </script>
 </body>
 </html>
